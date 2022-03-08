@@ -1,25 +1,7 @@
+import 'bootstrap/dist/css/bootstrap.css';
 import React from 'react';
-import './App.css';
-
-function App() {
-
-const [markdown, setMarkdown] = React.useState(placeholder)
-
-
-
-
-xd
-
-
-
-
-
-
-
-
-
-
-
+import './style.css';
+import marked from '/node_modules/marked/marked.min.js';
 
 const placeholder = `# Welcome to my React Markdown Previewer!
 
@@ -65,11 +47,47 @@ And here. | Okay. | I think we get it.
 `;
 
 
+marked.setOptions({
+  breaks: true,
+  });
+
+const renderer = new marked.Renderer();
+
+function App() {
+
+const [text, setText] = React.useState(placeholder)
+
+
   return (
-    <div>
-    Hello World
+    <div className='text-center px-4'>
+      <h1 className='p-4'>My Markdown Previewer</h1>
+      <textarea 
+      name="text" 
+      id="editor" 
+      rows="10" 
+      value={text}
+      onChange={e => setText(e.target.value)}
+      className="textarea"
+      ></textarea>
+      <h3 className="mt-3">Output</h3>
+      <Preview markdown={text}/>
     </div>
   );
 }
+
+
+function Preview({markdown}){
+  return(
+    <div
+      dangerouslySetInnerHTML={{
+        __html: marked(markdown, { renderer: renderer })
+      }}
+      id="preview"
+    />
+  )
+}
+
+
+
 
 export default App;
